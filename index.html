@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Role Selection</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="./dist/output.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/6fcd0eade4.js" crossorigin="anonymous"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="./scripts/auth.js" defer></script>
+  <meta name="google-signin-client_id" content="693363898999-dd7ujp8tvn4gqslte7jdlgimf0rcdtj2.apps.googleusercontent.com">
+  <style>
+    .hidden { display: none; }
+    .fade-in { animation: fadeIn 0.3s ease-in-out; }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4">
+
+  <!-- Role Selection Section -->
+  <div id="role-selection" class="max-w-2xl w-full bg-white shadow-md rounded-lg p-6 fade-in">
+    <h1 class="text-3xl font-extrabold text-center text-gray-800 mb-6">Select Your Role</h1>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <!-- Resident Role -->
+      <div class="bg-gray-100 hover:bg-gray-200 text-center p-6 rounded-lg shadow cursor-pointer" onclick="selectRole('Resident')">
+        <i class="fa-solid fa-user text-4xl text-indigo-600 mb-4"></i>
+        <h2 class="text-xl font-bold text-gray-800">Resident</h2>
+        <p class="text-sm text-gray-500">Book facilities and participate in events.</p>
+      </div>
+      <!-- Facility Staff Role -->
+      <div class="bg-gray-100 hover:bg-gray-200 text-center p-6 rounded-lg shadow cursor-pointer" onclick="selectRole('Facility Staff')">
+        <i class="fa-solid fa-tools text-4xl text-indigo-600 mb-4"></i>
+        <h2 class="text-xl font-bold text-gray-800">Facility Staff</h2>
+        <p class="text-sm text-gray-500">Manage maintenance and facility operations.</p>
+      </div>
+      <!-- Admin Role -->
+      <div class="bg-gray-100 hover:bg-gray-200 text-center p-6 rounded-lg shadow cursor-pointer" onclick="selectRole('Admin')">
+        <i class="fa-solid fa-user-shield text-4xl text-indigo-600 mb-4"></i>
+        <h2 class="text-xl font-bold text-gray-800">Admin</h2>
+        <p class="text-sm text-gray-500">Oversee users, bookings, and events.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login/Signup Section -->
+  <div id="auth-section" class="max-w-md w-full bg-white shadow-md rounded-lg p-6 hidden">
+    <h1 class="text-3xl font-extrabold text-center text-gray-800" id="auth-title">Welcome Back</h1>
+    <p class="text-sm text-gray-500 text-center mt-2" id="auth-description">Please login to your account</p>
+
+    <form class="space-y-5 mt-6">
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <div class="relative mt-1">
+          <input type="email" id="email" class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="you@example.com">
+          <i class="fa-solid fa-envelope absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+        </div>
+      </div>
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+        <div class="relative mt-1">
+          <input type="password" id="password" class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="••••••••">
+          <i class="fa-solid fa-lock absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+        </div>
+      </div>
+      <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 font-medium">Login</button>
+    </form>
+
+    <div class="mt-6 text-center">
+      <p class="text-sm text-gray-500">Or login with</p>
+      <div id="g_id_onload"
+           data-client_id="693363898999-dd7ujp8tvn4gqslte7jdlgimf0rcdtj2.apps.googleusercontent.com"
+           data-context="signin"
+           data-ux_mode="popup"
+           data-callback="handleGoogleSignIn"
+           data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin"
+           data-type="standard"
+           data-shape="rectangular"
+           data-theme="outline"
+           data-text="signin_with"
+           data-size="large"
+           data-logo_alignment="left">
+      </div>
+    </div>
+
+    <p class="mt-6 text-center text-sm text-gray-500">
+      Don't have an account? <a href="signup.html" class="text-indigo-600 hover:underline">Sign up</a>
+    </p>
+  </div>
+
+  <script>
+    function selectRole(role) {
+      // Store the selected role
+      localStorage.setItem('userRole', role);
+
+      // Update the login/signup section based on the role
+      document.getElementById('auth-title').textContent = `Welcome, ${role}`;
+      document.getElementById('auth-description').textContent = role === 'Resident'
+        ? 'Please login to book facilities and participate in events.'
+        : role === 'Facility Staff'
+        ? 'Please login to manage maintenance and operations.'
+        : 'Please login to oversee users, bookings, and events.';
+
+      // Show the login/signup section and hide the role selection
+      document.getElementById('role-selection').classList.add('hidden');
+      document.getElementById('auth-section').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>

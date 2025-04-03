@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up Page</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="./dist/output.css" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/6fcd0eade4.js" crossorigin="anonymous"></script>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="./scripts/auth.js" defer></script>
+  <meta name="google-signin-client_id" content="693363898999-dd7ujp8tvn4gqslte7jdlgimf0rcdtj2.apps.googleusercontent.com">
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4">
+
+  <div class="max-w-md w-full bg-white shadow-md rounded-lg p-6">
+    <h1 class="text-3xl font-extrabold text-center text-gray-800">Create an Account</h1>
+    <p class="text-sm text-gray-500 text-center mt-2">Sign up to get started</p>
+
+    <form class="space-y-5 mt-6">
+      <!-- Name Field -->
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+        <div class="relative mt-1">
+          <input type="text" id="name" class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Your Name">
+          <i class="fa-solid fa-user absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+        </div>
+      </div>
+
+      <!-- Username Field -->
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+        <div class="relative mt-1">
+          <input type="text" id="username" class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Your Username">
+          <i class="fa-solid fa-at absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+        </div>
+      </div>
+
+      <!-- Email Field -->
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <div class="relative mt-1">
+          <input type="email" id="email" class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="you@example.com">
+          <i class="fa-solid fa-envelope absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+        </div>
+      </div>
+
+      <!-- Password Field -->
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+        <div class="relative mt-1">
+          <input type="password" id="password" class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="••••••••">
+          <i class="fa-solid fa-lock absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+        </div>
+      </div>
+
+      <!-- Confirm Password Field -->
+      <div>
+        <label for="password_confirmation" class="block text-sm font-medium text-gray-700">Confirm Password</label>
+        <div class="relative mt-1">
+          <input type="password" id="password_confirmation" class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="••••••••">
+          <i class="fa-solid fa-lock absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+        </div>
+      </div>
+    </form>
+
+    <div class="mt-6 text-center">
+      <p class="text-sm text-gray-500">Or sign up with</p>
+      <div id="g_id_onload"
+           data-client_id="693363898999-dd7ujp8tvn4gqslte7jdlgimf0rcdtj2.apps.googleusercontent.com"
+           data-context="signup"
+           data-ux_mode="popup"
+           data-callback="handleGoogleSignIn"
+           data-auto_prompt="false">
+      </div>
+      <div class="g_id_signin"
+           data-type="standard"
+           data-shape="rectangular"
+           data-theme="outline"
+           data-text="signup_with"
+           data-size="large"
+           data-logo_alignment="left">
+      </div>
+    </div>
+
+    <p class="mt-6 text-center text-sm text-gray-500">
+      Already have an account? <a href="index.html" class="text-indigo-600 hover:underline">Login</a>
+    </p>
+  </div>
+</body>
+</html>
