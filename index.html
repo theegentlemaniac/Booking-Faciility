@@ -1,114 +1,223 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark" class="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Role Selection</title>
+  <meta name="viewport" content="width=width=device-width, initial-scale=1.0">
+  <title>Community Sports Hub</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="./dist/output.css" rel="stylesheet">
   <script src="https://kit.fontawesome.com/6fcd0eade4.js" crossorigin="anonymous"></script>
   <script src="https://accounts.google.com/gsi/client" async defer></script>
   <script src="./scripts/auth.js" defer></script>
   <meta name="google-signin-client_id" content="693363898999-dd7ujp8tvn4gqslte7jdlgimf0rcdtj2.apps.googleusercontent.com">
   <style>
-    .hidden { display: none; }
-    .fade-in { animation: fadeIn 0.3s ease-in-out; }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
+    .hidden { 
+      display: none;
+      opacity: 0;
+    }
+    
+    /* Login container styles (compact) */
+    .auth-container {
+      max-width: 280px;
+      width: 100%;
+      background-color: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      padding: 1.25rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      margin: 0 auto; /* Center horizontally */
+    }
+    
+    .auth-section-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%; /* Full height to center vertically */
+    }
+    
+    .input-field {
+      width: 100%;
+      padding: 0.4rem 0.5rem;
+      font-size: 0.875rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 0.375rem;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #f3f4f6;
+    }
+    
+    .input-field:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.4);
+    }
+    
+    .btn {
+      width: 100%;
+      padding: 0.4rem;
+      font-size: 0.875rem;
+      background-color: #6366f1;
+      color: white;
+      border: none;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .btn:hover {
+      background-color: #4f46e5;
+    }
+    
+    /* Body themes */
+    body[data-theme="dark"] {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
+      color: #f3f4f6;
+    }
+    
+    body[data-theme="light"] {
+      background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+      color: #1f2937;
     }
   </style>
 </head>
-<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4">
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 min-h-screen flex items-center justify-center p-4 transition-colors duration-300">
 
-  <!-- Role Selection Section -->
-  <div id="role-selection" class="max-w-2xl w-full bg-white shadow-md rounded-lg p-6 fade-in">
-    <h1 class="text-3xl font-extrabold text-center text-gray-800 mb-6">Select Your Role</h1>
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-      <!-- Resident Role -->
-      <div class="bg-gray-100 hover:bg-gray-200 text-center p-6 rounded-lg shadow cursor-pointer" onclick="selectRole('Resident')">
-        <i class="fa-solid fa-user text-4xl text-indigo-600 mb-4"></i>
-        <h2 class="text-xl font-bold text-gray-800">Resident</h2>
-        <p class="text-sm text-gray-500">Book facilities and participate in events.</p>
-      </div>
-      <!-- Facility Staff Role -->
-      <div class="bg-gray-100 hover:bg-gray-200 text-center p-6 rounded-lg shadow cursor-pointer" onclick="selectRole('Facility Staff')">
-        <i class="fa-solid fa-tools text-4xl text-indigo-600 mb-4"></i>
-        <h2 class="text-xl font-bold text-gray-800">Facility Staff</h2>
-        <p class="text-sm text-gray-500">Manage maintenance and facility operations.</p>
-      </div>
-      <!-- Admin Role -->
-      <div class="bg-gray-100 hover:bg-gray-200 text-center p-6 rounded-lg shadow cursor-pointer" onclick="selectRole('Admin')">
-        <i class="fa-solid fa-user-shield text-4xl text-indigo-600 mb-4"></i>
-        <h2 class="text-xl font-bold text-gray-800">Admin</h2>
-        <p class="text-sm text-gray-500">Oversee users, bookings, and events.</p>
-      </div>
-    </div>
-  </div>
+  <!-- Theme Toggle Button -->
+  <button onclick="toggleTheme()" class="absolute top-4 right-4 bg-gray-200/20 dark:bg-gray-800/20 text-gray-800 dark:text-gray-100 p-2 rounded-full hover:bg-gray-300/30 dark:hover:bg-gray-700/30 transition-all duration-300 shadow-md">
+    <i id="theme-icon" class="fas fa-moon text-base"></i>
+  </button>
 
-  <!-- Login/Signup Section -->
-  <div id="auth-section" class="max-w-md w-full bg-white shadow-md rounded-lg p-6 hidden">
-    <h1 class="text-3xl font-extrabold text-center text-gray-800" id="auth-title">Welcome Back</h1>
-    <p class="text-sm text-gray-500 text-center mt-2" id="auth-description">Please login to your account</p>
+  <!-- Auth Section -->
+  <div class="auth-section-wrapper">
+    <div class="auth-container">
+      <h1 class="text-xl font-bold text-center mb-2" id="auth-title">Welcome Back</h1>
+      <p class="text-xs text-gray-600 dark:text-gray-300 text-center mb-4" id="auth-description">Please login to your account</p>
 
-    <form class="space-y-5 mt-6">
-      <div>
-        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-        <div class="relative mt-1">
-          <input type="email" id="email" class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="you@example.com">
-          <i class="fa-solid fa-envelope absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+      <form class="space-y-3" onsubmit="handleLogin(event)">
+        <div>
+          <label for="email" class="block text-xs font-medium mb-1">Email</label>
+          <input type="email" id="email" class="input-field" placeholder="you@example.com" required>
+        </div>
+        <div>
+          <label for="password" class="block text-xs font-medium mb-1">Password</label>
+          <input type="password" id="password" class="input-field" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn">Login</button>
+      </form>
+
+      <!-- Google Sign-In Section -->
+      <div class="mt-3 text-center">
+        <p class="text-xs mb-2">Or login with</p>
+        <div id="g_id_onload"
+             data-client_id="693363898999-dd7ujp8tvn4gqslte7jdlgimf0rcdtj2.apps.googleusercontent.com"
+             data-context="signin"
+             data-ux_mode="popup"
+             data-callback="handleGoogleSignIn"
+             data-auto_prompt="false">
+        </div>
+        <div class="g_id_signin"
+             data-type="standard"
+             data-shape="rectangular"
+             data-theme="outline"
+             data-text="signin_with"
+             data-size="medium"
+             data-logo_alignment="left">
         </div>
       </div>
-      <div>
-        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-        <div class="relative mt-1">
-          <input type="password" id="password" class="block w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="••••••••">
-          <i class="fa-solid fa-lock absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
-        </div>
-      </div>
-      <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 font-medium">Login</button>
-    </form>
 
-    <div class="mt-6 text-center">
-      <p class="text-sm text-gray-500">Or login with</p>
-      <div id="g_id_onload"
-           data-client_id="693363898999-dd7ujp8tvn4gqslte7jdlgimf0rcdtj2.apps.googleusercontent.com"
-           data-context="signin"
-           data-ux_mode="popup"
-           data-callback="handleGoogleSignIn"
-           data-auto_prompt="false">
-      </div>
-      <div class="g_id_signin"
-           data-type="standard"
-           data-shape="rectangular"
-           data-theme="outline"
-           data-text="signin_with"
-           data-size="large"
-           data-logo_alignment="left">
-      </div>
+      <p class="mt-3 text-center text-xs">
+        Don't have an account? <a href="signup.html" class="text-indigo-400 hover:underline">Sign up</a>
+      </p>
+
+      <button onclick="backToRoles()" class="btn mt-2 text-xs">
+        Back to Roles
+      </button>
     </div>
-
-    <p class="mt-6 text-center text-sm text-gray-500">
-      Don't have an account? <a href="signup.html" class="text-indigo-600 hover:underline">Sign up</a>
-    </p>
   </div>
 
   <script>
-    function selectRole(role) {
-      // Store the selected role
-      localStorage.setItem('userRole', role);
+    // Initialize animations when page loads
+    document.addEventListener('DOMContentLoaded', () => {
+      // Set theme
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      document.documentElement.classList.toggle('dark', savedTheme === 'dark');
+      
+      const themeIcon = document.getElementById('theme-icon');
+      themeIcon.classList.toggle('fa-sun', savedTheme === 'light');
+      themeIcon.classList.toggle('fa-moon', savedTheme === 'dark');
+      
+      // Initial page load animation
+      document.body.style.opacity = '0';
+      setTimeout(() => {
+        document.body.style.transition = 'opacity 0.3s ease-in';
+        document.body.style.opacity = '1';
+      }, 10);
+      
+      // Smooth navigation for links
+      document.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function(e) {
+          if (this.href && this.href !== '#' && !this.href.includes('javascript')) {
+            e.preventDefault();
+            document.body.style.opacity = '0';
+            document.body.style.transition = 'opacity 0.3s ease-out';
+            
+            setTimeout(() => {
+              window.location.href = this.href;
+            }, 300);
+          }
+        });
+      });
+    });
 
-      // Update the login/signup section based on the role
-      document.getElementById('auth-title').textContent = `Welcome, ${role}`;
-      document.getElementById('auth-description').textContent = role === 'Resident'
-        ? 'Please login to book facilities and participate in events.'
-        : role === 'Facility Staff'
-        ? 'Please login to manage maintenance and operations.'
-        : 'Please login to oversee users, bookings, and events.';
+    function toggleTheme() {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      html.classList.toggle('dark', newTheme === 'dark');
+      
+      const icon = document.getElementById('theme-icon');
+      icon.classList.toggle('fa-moon', newTheme === 'dark');
+      icon.classList.toggle('fa-sun', newTheme === 'light');
+    }
 
-      // Show the login/signup section and hide the role selection
-      document.getElementById('role-selection').classList.add('hidden');
-      document.getElementById('auth-section').classList.remove('hidden');
+    function backToRoles() {
+      window.location.href = "roles.html"; // Redirect to roles.html
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      if (email && password) {
+        document.body.style.opacity = '0';
+        document.body.style.transition = 'opacity 0.3s ease-out';
+        
+        setTimeout(() => {
+          localStorage.setItem('userToken', 'mockToken');
+          redirectBasedOnRole();
+        }, 300);
+      } else {
+        alert('Please enter valid credentials');
+      }
+    }
+
+    function redirectBasedOnRole() {
+      const role = localStorage.getItem('userRole');
+      window.location.href = role === 'Admin' ? 'admin-dashboard.html' : 'dashboard.html';
+    }
+
+    function handleGoogleSignIn(response) {
+      console.log('Google sign-in response:', response);
+      document.body.style.opacity = '0';
+      document.body.style.transition = 'opacity 0.3s ease-out';
+      
+      setTimeout(() => {
+        localStorage.setItem('userToken', 'googleToken');
+        redirectBasedOnRole();
+      }, 300);
     }
   </script>
 </body>
