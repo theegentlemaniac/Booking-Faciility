@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports Dashboard | Community Sports Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://kit.fontawesome.com/6fcd0eade4.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { opacity: 0; transition: opacity 0.5s ease; overflow-x: hidden; }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #1f2937; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 10px; }
+    .chart-container { opacity: 0; transform: translateY(20px); transition: opacity 0.8s ease, transform 0.8s ease; }
+    .chart-container.visible { opacity: 1; transform: translateY(0); }
+    .dropdown:hover .dropdown-menu { display: block; }
+    .blur-bg { backdrop-filter: blur(8px); }
+    .report-card { transition: all 0.3s ease; }
+    .report-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-gray-800 min-h-screen flex flex-col text-slate-200">
+
+  <!-- Header -->
+  <header class="fixed top-0 left-0 right-0 blur-bg bg-gray-900/30 z-50 border-b border-white/10">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section class="flex justify-between h-16 items-center">
+        <a href="landingpage.html" class="flex-shrink-0 flex items-center">
+          <figure class="bg-indigo-600 rounded-lg w-8 h-8 flex items-center justify-center shadow-lg">
+            <i class="fas fa-futbol text-white text-lg"></i>
+          </figure>
+          <span class="ml-2 text-xl font-bold">Community Sports Hub</span>
+        </a>
+
+        <section class="hidden md:flex items-center space-x-8">
+          <a href="landingpage.html#facilities" class="hover:text-indigo-400">Facilities</a>
+          <a href="booking.html" class="hover:text-indigo-400">Book Now</a>
+          <a href="#" class="hover:text-indigo-400">My Bookings</a>
+          <a href="#" class="hover:text-indigo-400">Profile</a>
+          <a href="report.html" class="text-indigo-400 font-medium">Reports</a>
+          <button onclick="signOut()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">
+            <i class="fas fa-sign-out-alt mr-2"></i> Sign Out
+          </button>
+          <button onclick="toggleTheme()" class="p-2 rounded-full bg-gray-800/20 hover:bg-gray-700/30">
+            <i id="theme-icon" class="fas fa-moon"></i>
+          </button>
+        </section>
+
+        <section class="md:hidden flex items-center">
+          <button onclick="toggleTheme()" class="p-2 mr-2 rounded-full bg-gray-800/20">
+            <i id="theme-icon-mobile" class="fas fa-moon"></i>
+          </button>
+          <button id="mobile-menu-btn" class="p-2 rounded-md text-gray-300 hover:text-white">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+        </section>
+      </section>
+
+      <section id="mobile-menu" class="md:hidden hidden pb-3 px-2">
+        <menu class="flex flex-col space-y-2 mt-2">
+          <li><a href="landingpage.html#facilities" class="block px-3 py-2 rounded-md hover:bg-gray-700">Facilities</a></li>
+          <li><a href="booking.html" class="block px-3 py-2 rounded-md hover:bg-gray-700">Book Now</a></li>
+          <li><a href="#" class="block px-3 py-2 rounded-md hover:bg-gray-700">My Bookings</a></li>
+          <li><a href="#" class="block px-3 py-2 rounded-md hover:bg-gray-700">Profile</a></li>
+          <li><a href="report.html" class="block px-3 py-2 rounded-md text-indigo-400 bg-gray-700">Reports</a></li>
+          <li><button onclick="signOut()" class="w-full text-left bg-red-600 hover:bg-red-700 px-3 py-2 rounded-md mt-2">
+            <i class="fas fa-sign-out-alt mr-2"></i>Sign Out
+          </button></li>
+        </menu>
+      </section>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="flex-grow p-4 md:p-6 pt-20 md:pt-24 max-w-7xl mx-auto w-full">
+    <section class="mb-8">
+      <h1 class="text-3xl font-bold mb-2">Facility Reports Dashboard</h1>
+      <p class="text-slate-400">Analytics and insights for better facility management</p>
+    </section>
+
+    <!-- Stats Summary Cards -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <article class="report-card bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-slate-400 text-sm">Total Bookings</p>
+            <h3 class="text-2xl font-bold mt-1">1,248</h3>
+            <p class="text-green-400 text-sm mt-2"><i class="fas fa-arrow-up mr-1"></i> 12% from last month</p>
+          </div>
+          <div class="bg-indigo-600/20 p-3 rounded-lg">
+            <i class="fas fa-calendar-check text-indigo-400"></i>
+          </div>
+        </div>
+      </article>
+
+      <article class="report-card bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-slate-400 text-sm">Active Maintenance</p>
+            <h3 class="text-2xl font-bold mt-1">8</h3>
+            <p class="text-red-400 text-sm mt-2"><i class="fas fa-exclamation-circle mr-1"></i> 2 urgent issues</p>
+          </div>
+          <div class="bg-amber-600/20 p-3 rounded-lg">
+            <i class="fas fa-tools text-amber-400"></i>
+          </div>
+        </div>
+      </article>
+
+      <article class="report-card bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
+        <div class="flex justify-between items-start">
+          <div>
+            <p class="text-slate-400 text-sm">Member Satisfaction</p>
+            <h3 class="text-2xl font-bold mt-1">92%</h3>
+            <p class="text-green-400 text-sm mt-2"><i class="fas fa-smile-beam mr-1"></i> 4% improvement</p>
+          </div>
+          <div class="bg-green-600/20 p-3 rounded-lg">
+            <i class="fas fa-thumbs-up text-green-400"></i>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <!-- Usage Trends Report -->
+    <section class="bg-white/5 border border-white/10 rounded-xl p-6 mb-8 backdrop-blur-sm">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+        <div>
+          <h2 class="text-xl font-bold mb-1">Facility Usage Trends</h2>
+          <p class="text-slate-400">Booking statistics by facility for the last 30 days</p>
+        </div>
+        <div class="mt-4 md:mt-0">
+          <select class="bg-slate-700/70 border border-slate-600 rounded-lg px-4 py-2 text-sm">
+            <option>Last 30 Days</option>
+            <option>Last 7 Days</option>
+            <option>Last 90 Days</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="chart-container h-80">
+        <canvas id="usageChart"></canvas>
+      </div>
+      
+      <div class="flex justify-end mt-4">
+        <button class="bg-slate-700/70 hover:bg-slate-600/80 px-4 py-2 rounded-lg text-sm flex items-center">
+          <i class="fas fa-download mr-2"></i> Export as CSV
+        </button>
+      </div>
+    </section>
+
+    <!-- Maintenance Status Report -->
+    <section class="bg-white/5 border border-white/10 rounded-xl p-6 mb-8 backdrop-blur-sm">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+        <div>
+          <h2 class="text-xl font-bold mb-1">Maintenance Reports</h2>
+          <p class="text-slate-400">Current status of reported facility issues</p>
+        </div>
+        <div class="mt-4 md:mt-0">
+          <select class="bg-slate-700/70 border border-slate-600 rounded-lg px-4 py-2 text-sm">
+            <option>All Facilities</option>
+            <option>Football Pitch</option>
+            <option>Gym</option>
+            <option>Tennis Court</option>
+            <option>Basketball Court</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="chart-container h-64">
+          <canvas id="maintenanceChart"></canvas>
+        </div>
+        
+        <div>
+          <h3 class="font-medium mb-3">Recent Maintenance Tickets</h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg">
+              <div>
+                <p class="font-medium">Football Pitch - Lighting</p>
+                <p class="text-sm text-slate-400">Reported 2 days ago</p>
+              </div>
+              <span class="bg-amber-600/20 text-amber-400 px-2 py-1 rounded text-xs">In Progress</span>
+            </div>
+            
+            <div class="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg">
+              <div>
+                <p class="font-medium">Gym - Treadmill #3</p>
+                <p class="text-sm text-slate-400">Reported 5 days ago</p>
+              </div>
+              <span class="bg-red-600/20 text-red-400 px-2 py-1 rounded text-xs">Urgent</span>
+            </div>
+            
+            <div class="flex items-center justify-between p-3 bg-slate-700/50 rounded-lg">
+              <div>
+                <p class="font-medium">Basketball Court - Net</p>
+                <p class="text-sm text-slate-400">Reported 1 day ago</p>
+              </div>
+              <span class="bg-blue-600/20 text-blue-400 px-2 py-1 rounded text-xs">New</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="flex justify-end mt-4">
+        <button class="bg-slate-700/70 hover:bg-slate-600/80 px-4 py-2 rounded-lg text-sm flex items-center">
+          <i class="fas fa-download mr-2"></i> Export as PDF
+        </button>
+      </div>
+    </section>
+
+    <!-- Peak Hours Report -->
+    <section class="bg-white/5 border border-white/10 rounded-xl p-6 backdrop-blur-sm">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-6">
+        <div>
+          <h2 class="text-xl font-bold mb-1">Peak Hours Analysis</h2>
+          <p class="text-slate-400">Average bookings by time of day across all facilities</p>
+        </div>
+        <div class="mt-4 md:mt-0">
+          <select class="bg-slate-700/70 border border-slate-600 rounded-lg px-4 py-2 text-sm">
+            <option>All Facilities</option>
+            <option>Football Pitch</option>
+            <option>Gym</option>
+            <option>Tennis Court</option>
+            <option>Basketball Court</option>
+          </select>
+        </div>
+      </div>
+      
+      <div class="chart-container h-80">
+        <canvas id="peakHoursChart"></canvas>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+        <div class="bg-slate-800/50 p-4 rounded-lg">
+          <h3 class="font-medium mb-2">Busiest Time</h3>
+          <p class="text-2xl font-bold text-indigo-400">5-6 PM</p>
+          <p class="text-sm text-slate-400 mt-1">Average 24 bookings daily</p>
+        </div>
+        
+        <div class="bg-slate-800/50 p-4 rounded-lg">
+          <h3 class="font-medium mb-2">Quietest Time</h3>
+          <p class="text-2xl font-bold text-blue-400">8-9 AM</p>
+          <p class="text-sm text-slate-400 mt-1">Average 4 bookings daily</p>
+        </div>
+        
+        <div class="bg-slate-800/50 p-4 rounded-lg">
+          <h3 class="font-medium mb-2">Recommendation</h3>
+          <p class="text-sm">Consider offering morning discounts to improve off-peak utilization</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-8 px-4 sm:px-6 lg:px-8 mt-auto">
+    <article class="max-w-7xl mx-auto">
+      <section class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <article>
+          <a href="landingpage.html" class="flex items-center mb-4">
+            <figure class="bg-indigo-600 rounded-lg w-8 h-8 flex items-center justify-center">
+              <i class="fas fa-futbol text-white"></i>
+            </figure>
+            <span class="ml-2 text-xl font-bold">Community Sports Hub</span>
+          </a>
+          <p class="text-gray-400 text-sm">Your premier destination for sports and community activities.</p>
+        </article>
+
+        <nav>
+          <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="landingpage.html" class="text-gray-400 hover:text-white">Home</a></li>
+            <li><a href="landingpage.html#facilities" class="text-gray-400 hover:text-white">Facilities</a></li>
+            <li><a href="booking.html" class="text-gray-400 hover:text-white">Book Now</a></li>
+            <li><a href="report.html" class="text-gray-400 hover:text-white">Reports</a></li>
+          </ul>
+        </nav>
+
+        <nav>
+          <h3 class="text-lg font-semibold mb-4">Account</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-white">Profile</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white">Settings</a></li>
+            <li><button onclick="signOut()" class="text-red-400 hover:text-red-300">Sign Out</button></li>
+          </ul>
+        </nav>
+
+        <address>
+          <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
+          <nav class="flex space-x-4 mb-4">
+            <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+          </nav>
+          <p class="text-gray-400 text-sm">Email: info@communitysportshub.com</p>
+          <p class="text-gray-400 text-sm">Phone: (123) 456-7890</p>
+        </address>
+      </section>
+
+      <section class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-400 text-sm">
+        <p>© <span id="current-year"></span> Community Sports Hub. All rights reserved.</p>
+      </section>
+    </article>
+  </footer>
+
+  <script>
+    // DOM Elements
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const themeIcons = document.querySelectorAll('[id^="theme-icon"]');
+    const chartContainers = document.querySelectorAll('.chart-container');
+    
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.style.opacity = '1';
+      document.getElementById('current-year').textContent = new Date().getFullYear();
+      
+      // Check for saved theme preference
+      const savedTheme = localStorage.getItem('theme') || 'dark';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      
+      themeIcons.forEach(icon => {
+        icon.classList.toggle('fa-moon', savedTheme === 'dark');
+        icon.classList.toggle('fa-sun', savedTheme === 'light');
+      });
+      
+      // Setup event listeners
+      mobileMenuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+      
+      // Initialize charts after a slight delay to allow for transitions
+      setTimeout(() => {
+        initCharts();
+        // Make charts visible with animation
+        chartContainers.forEach(container => {
+          container.classList.add('visible');
+        });
+      }, 300);
+    });
+
+    function initCharts() {
+      // Usage Trends Chart (Bar Chart)
+      const usageCtx = document.getElementById('usageChart').getContext('2d');
+      const usageChart = new Chart(usageCtx, {
+        type: 'bar',
+        data: {
+          labels: ['Football Pitch', 'Gym', 'Tennis Court', 'Basketball Court', 'Swimming Pool'],
+          datasets: [{
+            label: 'Bookings',
+            data: [320, 290, 180, 250, 150],
+            backgroundColor: [
+              'rgba(79, 70, 229, 0.7)',
+              'rgba(99, 102, 241, 0.7)',
+              'rgba(129, 140, 248, 0.7)',
+              'rgba(165, 180, 252, 0.7)',
+              'rgba(199, 210, 254, 0.7)'
+            ],
+            borderColor: [
+              'rgba(79, 70, 229, 1)',
+              'rgba(99, 102, 241, 1)',
+              'rgba(129, 140, 248, 1)',
+              'rgba(165, 180, 252, 1)',
+              'rgba(199, 210, 254, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: {
+            duration: 2000,
+            easing: 'easeOutQuart'
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              },
+              ticks: {
+                color: 'rgba(255, 255, 255, 0.7)'
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              },
+              ticks: {
+                color: 'rgba(255, 255, 255, 0.7)'
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              backgroundColor: 'rgba(30, 41, 59, 0.9)',
+              titleColor: 'white',
+              bodyColor: 'rgba(255, 255, 255, 0.8)',
+              borderColor: 'rgba(255, 255, 255, 0.1)',
+              borderWidth: 1
+            }
+          }
+        }
+      });
+
+      // Maintenance Status Chart (Pie Chart)
+      const maintenanceCtx = document.getElementById('maintenanceChart').getContext('2d');
+      const maintenanceChart = new Chart(maintenanceCtx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Completed', 'In Progress', 'Pending', 'Urgent'],
+          datasets: [{
+            data: [15, 8, 12, 3],
+            backgroundColor: [
+              'rgba(16, 185, 129, 0.7)',
+              'rgba(245, 158, 11, 0.7)',
+              'rgba(59, 130, 246, 0.7)',
+              'rgba(239, 68, 68, 0.7)'
+            ],
+            borderColor: [
+              'rgba(16, 185, 129, 1)',
+              'rgba(245, 158, 11, 1)',
+              'rgba(59, 130, 246, 1)',
+              'rgba(239, 68, 68, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: {
+            duration: 2000,
+            easing: 'easeOutQuart'
+          },
+          plugins: {
+            legend: {
+              position: 'right',
+              labels: {
+                color: 'rgba(255, 255, 255, 0.7)'
+              }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(30, 41, 59, 0.9)',
+              titleColor: 'white',
+              bodyColor: 'rgba(255, 255, 255, 0.8)',
+              borderColor: 'rgba(255, 255, 255, 0.1)',
+              borderWidth: 1
+            }
+          },
+          cutout: '70%'
+        }
+      });
+
+      // Peak Hours Chart (Line Chart)
+      const peakHoursCtx = document.getElementById('peakHoursChart').getContext('2d');
+      const peakHoursChart = new Chart(peakHoursCtx, {
+        type: 'line',
+        data: {
+          labels: ['8 AM', '10 AM', '12 PM', '2 PM', '4 PM', '6 PM', '8 PM'],
+          datasets: [{
+            label: 'Average Bookings',
+            data: [4, 8, 12, 15, 18, 24, 14],
+            fill: true,
+            backgroundColor: 'rgba(79, 70, 229, 0.2)',
+            borderColor: 'rgba(99, 102, 241, 1)',
+            borderWidth: 2,
+            tension: 0.3,
+            pointBackgroundColor: 'rgba(99, 102, 241, 1)',
+            pointRadius: 4,
+            pointHoverRadius: 6
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: {
+            duration: 2000,
+            easing: 'easeOutQuart'
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              },
+              ticks: {
+                color: 'rgba(255, 255, 255, 0.7)'
+              }
+            },
+            x: {
+              grid: {
+                color: 'rgba(255, 255, 255, 0.1)'
+              },
+              ticks: {
+                color: 'rgba(255, 255, 255, 0.7)'
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              backgroundColor: 'rgba(30, 41, 59, 0.9)',
+              titleColor: 'white',
+              bodyColor: 'rgba(255, 255, 255, 0.8)',
+              borderColor: 'rgba(255, 255, 255, 0.1)',
+              borderWidth: 1
+            }
+          }
+        }
+      });
+    }
+
+    function signOut() {
+      document.body.style.opacity = '0';
+      setTimeout(() => {
+        // In a real app, you would clear session/tokens here
+        window.location.href = "landingpage.html";
+      }, 300);
+    }
+
+    function toggleTheme() {
+      const html = document.documentElement;
+      const newTheme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      
+      themeIcons.forEach(icon => {
+        icon.classList.toggle('fa-moon', newTheme === 'dark');
+        icon.classList.toggle('fa-sun', newTheme === 'light');
+      });
+    }
+  </script>
+</body>
+</html>
